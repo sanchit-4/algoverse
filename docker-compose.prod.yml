@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - RABBITMQ_URL=${RABBITMQ_URL}
+      - REDIS_URL=${REDIS_URL}
+      - PORT=3000
+    restart: always
+
+  worker-service:
+    build: ./worker-service
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - RABBITMQ_URL=${RABBITMQ_URL}
+      - REDIS_URL=${REDIS_URL}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3001:3000" # Host Port 3001 -> Container Port 3000
+    environment:
+      # This MUST be the public domain
+      - NEXT_PUBLIC_API_URL=https://algoverse.sanchit-goyal.is-a.dev/api
+    restart: always

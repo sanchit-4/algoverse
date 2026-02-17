@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String   // Hashed password
+  username  String   @unique
+  role      String   @default("user") // "user" or "admin"
+  createdAt DateTime @default(now())
+
+  submissions Submission[]
+  discussions Discussion[]
+  likes       Like[]
+}
+
+model Problem {
+  id          Int      @id @default(autoincrement())
+  title       String
+  slug        String   @unique
+  description String
+  difficulty  String
+  defaultCode Json     // { "cpp": "...", "python": "..." }
+  
+  testCases   TestCase[]
+  submissions Submission[]
+  discussions Discussion[]
+  likes       Like[]
+}
+
+model TestCase {
+  id             Int     @id @default(autoincrement())
+  input          String
+  expectedOutput String
+  problemId      Int
+  problem        Problem @relation(fields: [problemId], references: [id])
+}
+
+model Submission {
+  id        String   @id @default(uuid())
+  code      String
+  language  String
+  status    String   // ACCEPTED, WRONG_ANSWER...
+  time      String?  // e.g. "12ms"
+  memory    String?  // e.g. "4MB"
+  createdAt DateTime @default(now())
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  problemId Int
+  problem   Problem  @relation(fields: [problemId], references: [id])
+}
+
+model Discussion {
+  id        Int      @id @default(autoincrement())
+  text      String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  problemId Int
+  problem   Problem  @relation(fields: [problemId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Like {
+  id        Int     @id @default(autoincrement())
+  userId    String
+  problemId Int
+  liked     Boolean // true = like, false = dislike
+  
+  user      User    @relation(fields: [userId], references: [id])
+  problem   Problem @relation(fields: [problemId], references: [id])
+
+  @@unique([userId, problemId]) // User can only vote once per problem
+}
