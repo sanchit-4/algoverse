@@ -11,7 +11,7 @@ COPY . .
 
 # 3. Generate Prisma Client
 # We use the local copy of schema.prisma we just moved in Step 1
-RUN npx prisma generate --schema=./schema.prisma
+RUN npx prisma generate --schema=./prisma/schema.prisma
 
 # 4. Expose Port
 EXPOSE 3000
