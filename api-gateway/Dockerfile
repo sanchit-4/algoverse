@@ -18,4 +18,4 @@ EXPOSE 3000
 
 # 5. Start the server
 # Using ts-node for simplicity (ensure ts-node is in dependencies)
-CMD ["npx", "ts-node", "index.ts"]
+CMD ["npx", "tsx", "index.ts"]

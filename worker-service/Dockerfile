@@ -16,4 +16,4 @@ COPY . .
 RUN npx prisma generate
 
 # 5. Start the worker
-CMD ["npx", "ts-node", "index.ts"]
+CMD ["npx", "tsx", "index.ts"]
