@@ -502,8 +502,8 @@ app.get("/problems/:id", async (req, res) => {
     if (!problem) return res.status(404).json({ error: "Not found" });
     
     // Calculate likes/dislikes count manually
-    const likes = problem.likes.filter(l => l.liked).length;
-    const dislikes = problem.likes.filter(l => !l.liked).length;
+    const likes = problem.likes.filter((l:any) => l.liked).length;
+    const dislikes = problem.likes.filter((l:any) => !l.liked).length;
 
     res.json({ ...problem, likes, dislikes });
 });
