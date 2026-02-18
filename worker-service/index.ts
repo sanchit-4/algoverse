@@ -454,7 +454,7 @@
 import amqp from "amqplib";
 import Redis from "ioredis";
 import Docker from "dockerode";
-import { prisma } from "./lib/prisma"; 
+import { prisma } from "./lib/prisma.ts"; 
 import { initializeSubmission, compileCode, runCode, cleanupSubmission } from "./executor"; 
 import { LANGUAGE_MAP } from "./languages";
 

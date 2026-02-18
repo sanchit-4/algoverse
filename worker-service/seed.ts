@@ -388,7 +388,7 @@
 //   });
 
 
-import { prisma } from "./lib/prisma";
+import { prisma } from "./lib/prisma.ts";
 import bcrypt from "bcryptjs";
 
 // Helper to generate a random ID to ensure uniqueness if needed, 
