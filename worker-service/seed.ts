@@ -728,9 +728,18 @@ async function main() {
 
   // --- SEEDING LOOP ---
   for (const p of problems) {
-    await prisma.problem.create({
-      data: {
-        ...(p.id ? { id: p.id } : {}), // Only add ID if explicitly defined
+    await prisma.problem.upsert({
+      where: { slug: p.slug }, // Look up by Slug (Unique)
+      update: {
+        // If it exists, just update details (optional)
+        title: p.title,
+        description: p.description,
+        defaultCode: p.defaultCode,
+        difficulty: p.difficulty,
+      },
+      create: {
+        // If it's new, create it
+        ...(p.id ? { id: p.id } : {}), // Use ID if provided
         title: p.title,
         slug: p.slug,
         difficulty: p.difficulty,
